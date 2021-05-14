@@ -17,11 +17,11 @@
     "package": "com.huawei.gamepaddemo",
     "name": "testModule",
     "deviceType": [
-      "phone"
+      "tablet"
     ],
     "distro": {
       "deliveryWithInstall": true,
-      "moduleName": "entry_test",
+      "moduleName": "controller_test",
       "moduleType": "feature",
       "installationFree": true
     },

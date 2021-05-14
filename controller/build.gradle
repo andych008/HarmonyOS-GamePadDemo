@@ -12,9 +12,9 @@ ohos {
             certpath file('../keystore/gamepad.cer')
         }
     }
-    compileSdkVersion 4
+    compileSdkVersion 5
     defaultConfig {
-        compatibleSdkVersion 4
+        compatibleSdkVersion 5
     }
     buildTypes {
         release {
@@ -24,15 +24,14 @@ ohos {
             }
         }
     }
-
+    
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
-    implementation 'io.openharmony.tpc.thirdlib:EventBus:1.0.2'
     testImplementation 'junit:junit:4.13'
     ohosTestImplementation 'com.huawei.ohos.testkit:runner:1.0.0.100'
 }
 decc {
-    supportType = ['html', 'xml']
+    supportType = ['html','xml']
 }

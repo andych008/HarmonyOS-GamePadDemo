@@ -9,7 +9,9 @@ import ohos.aafwk.ability.IAbilityConnection;
 import ohos.aafwk.content.Intent;
 import ohos.aafwk.content.Operation;
 import ohos.agp.window.dialog.ToastDialog;
+import ohos.bundle.AbilityInfo;
 import ohos.bundle.ElementName;
+import ohos.bundle.IBundleManager;
 import ohos.data.distributed.common.KvManagerConfig;
 import ohos.data.distributed.common.KvManagerFactory;
 import ohos.distributedschedule.interwork.DeviceInfo;
@@ -18,8 +20,8 @@ import ohos.distributedschedule.interwork.IDeviceStateCallback;
 import ohos.eventhandler.EventHandler;
 import ohos.eventhandler.EventRunner;
 import ohos.eventhandler.InnerEvent;
-import ohos.media.image.Image;
 import ohos.rpc.IRemoteObject;
+import ohos.rpc.RemoteException;
 
 import java.util.List;
 
@@ -83,6 +85,14 @@ public class HandleAbilitySlice extends AbilitySlice {
     @Override
     protected void onStop() {
         super.onStop();
+        onBackPressed();
+    }
+
+    @Override
+    protected void onBackPressed() {
+        super.onBackPressed();
+        remoteProxy.remoteControl(Const.FINISH);
+        disconnectAbility(connection);
         DeviceManager.unregisterDeviceStateCallback(callback);
     }
 
@@ -90,35 +100,34 @@ public class HandleAbilitySlice extends AbilitySlice {
         Object obj = intent.getParams().getParam(Const.DEVICE_ID_KEY);
         if (obj instanceof String) {
             deviceId = (String) obj;
-            connectToAndroidService();
-//            startAndroidActivity();
+            connectToRemoteService();
         }
         DeviceManager.registerDeviceStateCallback(callback);
     }
 
-    private void connectToAndroidService() {
+    private void connectToRemoteService() {
         Intent intent = new Intent();
         Operation operation = new Intent.OperationBuilder()
                 .withDeviceId(deviceId)
-                .withBundleName(Const.ANDROID_PACKAGE_NAME)
-                .withAbilityName(Const.ANDROID_SERVICE_NAME)
-                .withFlags(Intent.FLAG_NOT_OHOS_COMPONENT)
-                .build();
-        intent.setOperation(operation);
-        boolean success = connectAbility(intent, connection);
-        showToast("service connect : " + success);
-    }
-
-    private void startAndroidActivity() {
-        Intent intent = new Intent();
-        Operation operation = new Intent.OperationBuilder()
-                .withDeviceId(deviceId)
-                .withBundleName(Const.ANDROID_PACKAGE_NAME)
-                .withAbilityName(Const.ANDROID_ACTIVIY_NAME)
+                .withBundleName(Const.BUNDLE_NAME)
+                .withAbilityName(Const.ABILITY_NAME)
                 .withFlags(Intent.FLAG_ABILITYSLICE_MULTI_DEVICE)
                 .build();
         intent.setOperation(operation);
-        startAbility(intent);
+        try {
+            List<AbilityInfo> abilityInfoList = getBundleManager().queryAbilityByIntent(
+                    intent,
+                    IBundleManager.GET_BUNDLE_DEFAULT,
+                    0);
+            if (abilityInfoList != null && !abilityInfoList.isEmpty()) {
+                connectAbility(intent, connection);
+                LogUtil.info(TAG, "connect service on tablet with id " + deviceId );
+            } else {
+                showToast("Cannot connect service on tablet");
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupRemoteButton() {
@@ -139,8 +148,7 @@ public class HandleAbilitySlice extends AbilitySlice {
                 LogUtil.info(TAG, "Found device " + deviceInfo.getDeviceType());
                 if (deviceType == DeviceInfo.DeviceType.SMART_PAD && !deviceId.equals(this.deviceId)) {
                     this.deviceId = deviceId;
-                    connectToAndroidService();
-//                    startAndroidActivity();
+                    connectToRemoteService();
                 }
             });
         }

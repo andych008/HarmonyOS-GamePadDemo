@@ -25,6 +25,7 @@ import java.util.List;
 
 public class DeviceListAbilitySlice extends AbilitySlice {
 
+    private ListContainer deviceList;
     private DeviceItemProvider provider;
     private static final int EVENT_STATE_CHANGE = 10001;
 
@@ -59,7 +60,9 @@ public class DeviceListAbilitySlice extends AbilitySlice {
     @Override
     protected void onActive() {
         super.onActive();
-        updateDeviceList();
+        if (provider.getCount() == 0) {
+            updateDeviceList();
+        }
     }
 
     @Override
@@ -80,13 +83,13 @@ public class DeviceListAbilitySlice extends AbilitySlice {
     private void updateDeviceList() {
         List<DeviceInfo> deviceInfoList = DeviceManager.getDeviceList(DeviceInfo.FLAG_GET_ONLINE_DEVICE);
         provider.updateItems(deviceInfoList);
+        deviceList.setItemProvider(provider);
     }
 
     private void setupUI() {
         setUIContent(ResourceTable.Layout_ability_device_list);
-        ListContainer deviceList = (ListContainer) findComponentById(ResourceTable.Id_device_list);
+        deviceList = (ListContainer) findComponentById(ResourceTable.Id_device_list);
         provider = new DeviceItemProvider(this, this::startHandle);
-        deviceList.setItemProvider(provider);
     }
 
     private void initData() {

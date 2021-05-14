@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "Controller"
+    },
+    {
+      "name": "mainability_description",
+      "value": "Java_Tablet_Empty Feature Ability"
+    },
+    {
+      "name": "HelloWorld",
+      "value": "Hello World"
+    },
+    {
+      "name": "handleserviceability_description",
+      "value": "hap sample empty service"
+    },
+    {
+      "name": "serviceability_description",
+      "value": "hap sample empty service"
+    }
+  ]
+}
