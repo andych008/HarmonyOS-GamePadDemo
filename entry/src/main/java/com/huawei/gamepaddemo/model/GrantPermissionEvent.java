@@ -1,8 +1,8 @@
 package com.huawei.gamepaddemo.model;
 
 public class GrantPermissionEvent {
-    private String permission;
-    private Boolean isGranted;
+    private final String permission;
+    private final Boolean isGranted;
 
     public GrantPermissionEvent(String permission, Boolean isGranted) {
         this.permission = permission;

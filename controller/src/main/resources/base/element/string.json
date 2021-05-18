@@ -19,6 +19,14 @@
     {
       "name": "serviceability_description",
       "value": "hap sample empty service"
+    },
+    {
+      "name": "resultserviceability_description",
+      "value": "hap sample empty service"
+    },
+    {
+      "name": "resultserviceability_description",
+      "value": "hap sample empty service"
     }
   ]
 }

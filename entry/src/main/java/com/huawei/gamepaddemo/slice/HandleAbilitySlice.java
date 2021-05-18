@@ -4,10 +4,13 @@ import com.huawei.gamepaddemo.ResourceTable;
 import com.huawei.gamepaddemo.controller.Const;
 import com.huawei.gamepaddemo.controller.HandleRemoteProxy;
 import com.huawei.gamepaddemo.controller.LogUtil;
+import com.huawei.gamepaddemo.model.LocationEvent;
+import com.huawei.gamepaddemo.model.TerminateEvent;
 import ohos.aafwk.ability.AbilitySlice;
 import ohos.aafwk.ability.IAbilityConnection;
 import ohos.aafwk.content.Intent;
 import ohos.aafwk.content.Operation;
+import ohos.agp.components.Text;
 import ohos.agp.window.dialog.ToastDialog;
 import ohos.bundle.AbilityInfo;
 import ohos.bundle.ElementName;
@@ -22,6 +25,9 @@ import ohos.eventhandler.EventRunner;
 import ohos.eventhandler.InnerEvent;
 import ohos.rpc.IRemoteObject;
 import ohos.rpc.RemoteException;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -94,6 +100,20 @@ public class HandleAbilitySlice extends AbilitySlice {
         remoteProxy.remoteControl(Const.FINISH);
         disconnectAbility(connection);
         DeviceManager.unregisterDeviceStateCallback(callback);
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLocationEvent(LocationEvent event) {
+        getUITaskDispatcher().asyncDispatch(() -> {
+            Text text = (Text) findComponentById(ResourceTable.Id_location_text);
+            text.setText(event.toString());
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTerminateEvent(TerminateEvent event) {
+        getUITaskDispatcher().asyncDispatch(this::terminate);
     }
 
     private void initData(Intent intent) {
@@ -103,6 +123,7 @@ public class HandleAbilitySlice extends AbilitySlice {
             connectToRemoteService();
         }
         DeviceManager.registerDeviceStateCallback(callback);
+        EventBus.getDefault().register(this);
     }
 
     private void connectToRemoteService() {

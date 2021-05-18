@@ -52,6 +52,13 @@
         "icon": "$media:icon",
         "description": "$string:serviceability_description",
         "type": "service"
+      },
+      {
+        "name": "com.huawei.gamepaddemo.ResultServiceAbility",
+        "icon": "$media:icon",
+        "description": "$string:resultserviceability_description",
+        "visible": true,
+        "type": "service"
       }
     ],
     "reqPermissions": [
