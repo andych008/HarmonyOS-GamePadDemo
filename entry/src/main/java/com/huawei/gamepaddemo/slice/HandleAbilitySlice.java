@@ -152,10 +152,14 @@ public class HandleAbilitySlice extends AbilitySlice {
     }
 
     private void setupRemoteButton() {
-        findComponentById(ResourceTable.Id_up_button).setClickedListener(component -> remoteProxy.remoteControl(Const.UP));
-        findComponentById(ResourceTable.Id_down_button).setClickedListener(component -> remoteProxy.remoteControl(Const.DOWN));
-        findComponentById(ResourceTable.Id_left_button).setClickedListener(component -> remoteProxy.remoteControl(Const.LEFT));
-        findComponentById(ResourceTable.Id_right_button).setClickedListener(component -> remoteProxy.remoteControl(Const.RIGHT));
+        findComponentById(ResourceTable.Id_up_button).setClickedListener(component ->
+                remoteProxy.remoteControl(Const.UP));
+        findComponentById(ResourceTable.Id_down_button).setClickedListener(component ->
+                remoteProxy.remoteControl(Const.DOWN));
+        findComponentById(ResourceTable.Id_left_button).setClickedListener(component ->
+                remoteProxy.remoteControl(Const.LEFT));
+        findComponentById(ResourceTable.Id_right_button).setClickedListener(component ->
+                remoteProxy.remoteControl(Const.RIGHT));
     }
 
     private void getTabletDevice() {

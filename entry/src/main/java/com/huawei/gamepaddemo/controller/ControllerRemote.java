@@ -19,7 +19,7 @@ public class ControllerRemote extends RemoteObject implements IRemoteBroker {
     }
 
     @Override
-    public boolean onRemoteRequest(int code, MessageParcel data, MessageParcel reply, MessageOption option) throws RemoteException {
+    public boolean onRemoteRequest(int code, MessageParcel data, MessageParcel reply, MessageOption option) {
         switch (code) {
             case LOCATION_COMMAND:
                 float x = data.readFloat();

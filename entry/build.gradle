@@ -12,9 +12,9 @@ ohos {
             certpath file('../keystore/gamepad.cer')
         }
     }
-    compileSdkVersion 4
+    compileSdkVersion 5
     defaultConfig {
-        compatibleSdkVersion 4
+        compatibleSdkVersion 5
     }
     buildTypes {
         release {
